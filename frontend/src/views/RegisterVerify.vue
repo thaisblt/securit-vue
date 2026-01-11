@@ -9,7 +9,7 @@
     const codeError = ref(false)
     
     async function handleCode(){
-        const res = await fetch('/check_register_code', {
+        const res = await fetch('/api/check_register_code', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

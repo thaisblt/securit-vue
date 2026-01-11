@@ -9,7 +9,7 @@
     const password2 = ref()
     
     async function registration(){
-        const res = await fetch('/check_name_password', {
+        const res = await fetch('/api/check_name_password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

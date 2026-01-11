@@ -6,7 +6,7 @@
     const email = ref()
     
     async function handleRegister(){
-        const res = await fetch('/check_register', {
+        const res = await fetch('/api/check_register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

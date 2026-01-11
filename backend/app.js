@@ -16,7 +16,7 @@ app.use(cookieParser())
 
 // Se connecter => Vérifier l'authentification (mail dans BD et password ok)
 
-app.post('/check_login', async(req, res) => {
+app.post('/api/check_login', async(req, res) => {
     const { email, password } = req.body;
     const user = await prisma.User.findUnique({
         where : {email}
@@ -43,7 +43,7 @@ app.post('/check_login', async(req, res) => {
     }
 });
 // Se connecter : Verifier le code
-app.post('/check_login_code', async (req, res) => {
+app.post('/api/check_login_code', async (req, res) => {
     const { email, code } = req.body;
     //let attempts = req.body.attempts;
     const user = await prisma.User.findUnique({
@@ -74,7 +74,7 @@ app.post('/check_login_code', async (req, res) => {
 });
 
 // Créer un compte : Vérifier si le mail existe
-app.post('/check_register', async(req, res) => {
+app.post('/api/check_register', async(req, res) => {
     const email = req.body.email.toLowerCase();
     const userList = await prisma.User.findMany({
         where : {email}
@@ -96,7 +96,7 @@ app.post('/check_register', async(req, res) => {
 });
 
 // Créer un compte => Vérifier le code reçu
-app.post('/check_register_code', (req, res) => {
+app.post('/api/check_register_code', (req, res) => {
    const { email, code } = req.body;
    //let attempts = req.body.attempts;
    console.log(email2code);
@@ -121,7 +121,7 @@ app.post('/check_register_code', (req, res) => {
 });
 
 // Créer un compte => Verifier que les mdp sont valides et ajouter l'utilisateur à la BD si info ok
-app.post('/check_name_password', async(req, res) => {   
+app.post('/api/check_name_password', async(req, res) => {   
     const { email, name, password1, password2 } = req.body;
     if (password1 === password2) {
         const hashedPassword = await bcrypt.hash(password1, 4)

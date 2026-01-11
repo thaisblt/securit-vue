@@ -1,6 +1,14 @@
 <script setup>
-    import { ref } from "vue"
-    import router from '../router'
+import { ref, onMounted } from "vue"
+import router from '../router'
+import { visits } from '../state.mjs'
+
+
+onMounted(async () => {
+    const res = await fetch('/api/visit', {
+        
+    })
+})
 
 </script>        
         

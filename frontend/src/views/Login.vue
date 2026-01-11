@@ -10,7 +10,7 @@
     
 
     async function handleSignin(){
-        const res = await fetch('/check_login', {
+        const res = await fetch('/api/check_login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
