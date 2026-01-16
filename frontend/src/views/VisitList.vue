@@ -1,12 +1,31 @@
 <script setup>
-import { ref, onMounted } from "vue"
+import { ref, onMounted, computed } from "vue"
 import router from '../router'
 import { visits } from '../state.mjs'
 
-
+// Récupérer la liste des visites 
 onMounted(async () => {
     const res = await fetch('/api/visit', {
-        
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+
+    visits.value = await res.json()
+})
+
+// Barre de recherche
+const searchInput = ref('')
+
+const filteredVisits = computed( () => {
+    if (!searchInput.value) {
+        return visits.value
+    }
+
+    return visits.value.filter( visit => {
+        return visit.company.name.toLowerCase().includes(searchInput.value.toLowerCase()) ||
+        visit.inspector.name.toLowerCase().includes(searchInput.value.toLowerCase())
     })
 })
 
@@ -17,9 +36,8 @@ onMounted(async () => {
         <div class="search">
             <input
                 type="search"
-                id="search"
-                name="search"
-                placeholder="Pas fonctionnel..."
+                v-model="searchInput"
+                placeholder="A tester quand BD remplie"
             />
         </div>
 
@@ -40,21 +58,20 @@ onMounted(async () => {
                 </tr>
             </thead>
             <tbody>
-                <% if (visites.length === 0) { %>
+                <template v-if="filteredVisits.length === 0">
                     <tr>
-                        <td colspan="3" class="empty">Aucune visite enregistrée</td>
+                        <td colspan="4" class="empty">Aucune visite enregistrée</td>
                     </tr>
-                <% } else { %>
-                    <% visites.forEach(visit => { %>
-                        <tr>
-                            <td><%= new Date(visit.date).toLocaleDateString() %></td>
-                            <td><%= visit.company.name %></td>
-                            <td><%= visit.inspector.name %></td>
-                            <td><a href="/visit_detail/<%= visit.id %>" class="bouton">Afficher</a></td>
+                </template>
 
-                        </tr>
-                    <% }) %>
-                <% } %>
+                <template v-else>
+                    <tr v-for ="visit in filteredVisits" :key="visit.id">
+                            <td>{{ new Date(visit.date).toLocaleDateString() }}></td>
+                            <td>{{ visit.company.name }}</td>
+                            <td>{{ visit.inspector.name }}</td>
+                            <td><a href="/visit_detail/<%= visit.id %>" class="bouton">Afficher</a></td>
+                    </tr>
+                </template>
             </tbody>
         </table>
     </main>
